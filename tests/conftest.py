@@ -18,3 +18,8 @@ def student_user():
 @pytest.fixture
 def student_profile(student_user):
     return StudentProfile.objects.create(user=student_user, enrollment_number='TEST001_cf', enrollment_date='2024-01-01', department='CS')
+
+@pytest.fixture
+def api_client():
+    from rest_framework.test import APIClient
+    return APIClient()

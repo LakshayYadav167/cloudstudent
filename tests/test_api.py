@@ -6,10 +6,6 @@ from students.models import StudentProfile
 from courses.models import Course, Enrollment
 from academics.models import AcademicRecord
 
-@pytest.fixture
-def api_client():
-    return APIClient()
-
 @pytest.mark.django_db
 def test_unauthenticated_access(api_client):
     url = reverse('student-list')
