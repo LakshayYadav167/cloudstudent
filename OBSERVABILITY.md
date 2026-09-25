@@ -26,7 +26,7 @@ method=GET path=/api/students/ status=200 duration=45.2ms user=admin_user reques
 ## Authentication/Security Events
 Security events are captured efficiently via Django Signals (`user_logged_in` and `user_login_failed`) and logged using the `cloudstudent.security` logger.
 - Successful logins log the username and request ID at the `INFO` level.
-- Failed attempts log the attempted username (safely extracted from credentials) at the `WARNING` level. Passwords are mathematically guaranteed never to be logged.
+- Failed attempts log the attempted username (safely extracted from credentials) at the `WARNING` level. Passwords are never logged.
 
 ## Request Correlation
 The middleware automatically injects a unique `uuid4` into every request as `request.request_id`. This ID is appended to all request and security logs, allowing developers to trace the entire lifecycle of a specific request. The ID is also returned to the client via the `X-Request-ID` HTTP header for easier bug reporting.

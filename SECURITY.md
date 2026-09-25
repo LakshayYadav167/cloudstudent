@@ -12,7 +12,7 @@ A strict Role-Based Access Control (RBAC) model is enforced server-side.
 - **STUDENT**: Strictly read-only access limited exclusively to their own enrollments, academic records, and dashboard data.
 
 ## Object-Level Data Isolation (IDOR/BOLA Protection)
-All primary ModelViewSets (API) and Django Class-Based Views (HTML) explicitly filter querysets based on `request.user`. Even if a malicious actor acquires the numeric primary key (ID) of an unauthorized resource, the backend will return a generic `404 Not Found` or `403 Forbidden` response, mathematically preventing Insecure Direct Object References (IDOR).
+All primary ModelViewSets (API) and Django Class-Based Views (HTML) explicitly filter querysets based on `request.user`. Even if a malicious actor acquires the numeric primary key (ID) of an unauthorized resource, the backend will return a generic `404 Not Found` or `403 Forbidden` response. No unsafe access path was identified during this audit.
 
 ## API Security
 - Unauthenticated API access is universally blocked (`401 Unauthorized`).
