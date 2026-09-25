@@ -10,11 +10,11 @@ from .serializers import (
 from students.models import StudentProfile
 from courses.models import Course, Enrollment
 from academics.models import AcademicRecord
-from .permissions import RoleBasedPermission
+from .permissions import RoleBasedPermission, IsAdminOrReadOnly
 
 class StudentViewSet(viewsets.ModelViewSet):
     serializer_class = StudentProfileSerializer
-    permission_classes = [RoleBasedPermission]
+    permission_classes = [RoleBasedPermission, IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['department', 'program', 'semester', 'status']
     search_fields = ['user__first_name', 'user__last_name', 'user__email', 'enrollment_number']
@@ -29,7 +29,7 @@ class StudentViewSet(viewsets.ModelViewSet):
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
-    permission_classes = [RoleBasedPermission]
+    permission_classes = [RoleBasedPermission, IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['department', 'semester']
     search_fields = ['code', 'name', 'instructor__first_name', 'instructor__last_name']
@@ -40,7 +40,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
     serializer_class = EnrollmentSerializer
-    permission_classes = [RoleBasedPermission]
+    permission_classes = [RoleBasedPermission, IsAdminOrReadOnly]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['student', 'course', 'academic_year', 'semester', 'status']
 

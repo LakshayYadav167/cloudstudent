@@ -80,6 +80,8 @@ class EnrollmentListView(TeacherRequiredMixin, ListView):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        if self.request.user.role == 'TEACHER':
+            qs = qs.filter(course__instructor=self.request.user)
         query = self.request.GET.get('q')
         course = self.request.GET.get('course')
         status = self.request.GET.get('status')

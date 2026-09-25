@@ -72,6 +72,12 @@ class AcademicRecordUpdateView(TeacherRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('academics:detail', kwargs={'pk': self.object.pk})
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.role == 'TEACHER':
+            return qs.filter(enrollment__course__instructor=self.request.user)
+        return qs
+
     def form_valid(self, form):
         messages.success(self.request, 'Academic record updated successfully.')
         return super().form_valid(form)
