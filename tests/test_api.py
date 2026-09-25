@@ -146,3 +146,28 @@ def test_pagination_and_filtering(api_client, custom_admin_user):
     resp3 = api_client.get(url + '?search=CS1')
     assert resp3.status_code == 200
     assert len(resp3.data['results']) >= 1
+
+@pytest.mark.django_db
+def test_unauthorized_deletion(api_client, student_user, custom_admin_user):
+    course = Course.objects.create(code='CS998', name='Test Del', credits=3, semester=1, department='CS')
+    url = reverse('course-detail', kwargs={'pk': course.pk})
+    
+    # Student cannot delete
+    api_client.force_authenticate(user=student_user)
+    resp = api_client.delete(url)
+    assert resp.status_code == 403
+    
+    # Admin can delete
+    api_client.force_authenticate(user=custom_admin_user)
+    resp2 = api_client.delete(url)
+    assert resp2.status_code == 204
+
+@pytest.mark.django_db
+def test_malformed_request(api_client, custom_admin_user):
+    api_client.force_authenticate(user=custom_admin_user)
+    url = reverse('course-list')
+    
+    # Missing required fields
+    resp = api_client.post(url, {'code': 'CS997'})
+    assert resp.status_code == 400
+    assert 'name' in resp.data

@@ -64,3 +64,47 @@ class TestModels:
         ar.marks = 92
         ar.save()
         assert ar.grade == 'A+'
+
+    def test_grade_boundaries(self):
+        u1 = User.objects.create_user(username='s6', role='STUDENT')
+        sp = StudentProfile.objects.create(user=u1, enrollment_number='E005', enrollment_date=timezone.now().date())
+        c = Course.objects.create(code='CS105', credits=3, semester=1)
+        e = Enrollment.objects.create(student=sp, course=c, academic_year='2023', semester=1)
+
+        ar = AcademicRecord.objects.create(enrollment=e, marks=49, attendance=100)
+        assert ar.grade == 'F'
+        ar.marks = 50; ar.save(); assert ar.grade == 'D'
+        ar.marks = 59; ar.save(); assert ar.grade == 'D'
+        ar.marks = 60; ar.save(); assert ar.grade == 'C'
+        ar.marks = 69; ar.save(); assert ar.grade == 'C'
+        ar.marks = 70; ar.save(); assert ar.grade == 'B'
+        ar.marks = 79; ar.save(); assert ar.grade == 'B'
+        ar.marks = 80; ar.save(); assert ar.grade == 'A'
+        ar.marks = 89; ar.save(); assert ar.grade == 'A'
+        ar.marks = 90; ar.save(); assert ar.grade == 'A+'
+        ar.marks = 100; ar.save(); assert ar.grade == 'A+'
+
+    def test_invalid_marks_attendance(self):
+        from django.core.exceptions import ValidationError
+        u1 = User.objects.create_user(username='s7', role='STUDENT')
+        sp = StudentProfile.objects.create(user=u1, enrollment_number='E006', enrollment_date=timezone.now().date())
+        c = Course.objects.create(code='CS106', credits=3, semester=1)
+        e = Enrollment.objects.create(student=sp, course=c, academic_year='2023', semester=1)
+
+        ar = AcademicRecord(enrollment=e, marks=-1, attendance=80)
+        with pytest.raises(ValidationError):
+            ar.full_clean()
+            
+        ar2 = AcademicRecord(enrollment=e, marks=101, attendance=80)
+        with pytest.raises(ValidationError):
+            ar2.full_clean()
+
+    def test_invalid_course_credits(self):
+        from django.core.exceptions import ValidationError
+        c = Course(code='CS999', credits=11, semester=1)
+        with pytest.raises(ValidationError):
+            c.full_clean()
+        
+        c2 = Course(code='CS998', credits=0, semester=1)
+        with pytest.raises(ValidationError):
+            c2.full_clean()

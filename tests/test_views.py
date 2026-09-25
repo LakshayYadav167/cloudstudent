@@ -131,3 +131,23 @@ def test_dashboard_view(client, custom_admin_user):
     client.force_login(custom_admin_user)
     resp = client.get(reverse('dashboard:index'))
     assert resp.status_code == 200
+
+def test_invalid_login(client):
+    resp = client.post(reverse('accounts:login'), {'username': 'wrong', 'password': 'wrong'})
+    assert resp.status_code == 200
+    assert 'Please enter a correct username and password.' in resp.content.decode('utf-8') or "Your username and password didn't match" in resp.content.decode('utf-8')
+
+def test_unauthenticated_access_redirect(client):
+    resp = client.get(reverse('dashboard:index'))
+    assert resp.status_code == 302
+    assert '/login/' in resp.url
+
+def test_unauthorized_modification_course(client, student_user, custom_admin_user):
+    course = Course.objects.create(code='CS999', name='Test', credits=3, semester=1, department='CS')
+    
+    # Student cannot edit
+    client.force_login(student_user)
+    resp = client.post(reverse('courses:edit', kwargs={'pk': course.pk}), {'name': 'Hacked'})
+    assert resp.status_code == 403
+    course.refresh_from_db()
+    assert course.name == 'Test'
