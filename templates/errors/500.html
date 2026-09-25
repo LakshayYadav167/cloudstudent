@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Access Denied - CloudStudent{% endblock %}
+{% block title %}Server Error - CloudStudent{% endblock %}
 {% block content %}
 <div class="d-flex align-items-center justify-content-center vh-100">
     <div class="text-center">
-        <h1 class="display-1 fw-bold text-danger">403</h1>
-        <p class="fs-3"> <span class="text-danger">Oops!</span> Access Denied.</p>
+        <h1 class="display-1 fw-bold text-secondary">500</h1>
+        <p class="fs-3"> <span class="text-secondary">Oops!</span> Internal Server Error.</p>
         <p class="lead">
-            You do not have permission to view this resource.
+            Something went wrong on our end. Please try again later.
         </p>
         <a href="{% url 'dashboard:index' %}" class="btn btn-primary">Go Home</a>
     </div>

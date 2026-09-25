@@ -139,9 +139,9 @@ Standard Token authentication is required. See [API_DOCUMENTATION.md](API_DOCUME
 
 ## 20. Demo Credentials
 *(For local development only. Do NOT use these in production.)*
-- **Admin**: `admin` / `adminpassword123`
-- **Teacher**: `teacher` / `teacherpassword123`
-- **Student**: `student` / `studentpassword123`
+- **Admin**: `admin` / `<DEMO_PASSWORD>`
+- **Teacher**: `teacher` / `<DEMO_PASSWORD>`
+- **Student**: `student` / `<DEMO_PASSWORD>`
 *Run `python manage.py runscript seed_demo` to generate seed data if applicable.*
 
 ## 21. Development Workflow
