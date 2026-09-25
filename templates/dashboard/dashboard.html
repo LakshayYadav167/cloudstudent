@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CloudStudent{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    {% if request.user.role == 'ADMIN' %}
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-blue"><i class="bi bi-people"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Total Students</h5>
+                    <h2 class="fw-bold mb-0">{{ total_students }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-green"><i class="bi bi-journal-text"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Total Courses</h5>
+                    <h2 class="fw-bold mb-0">{{ total_courses }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-orange"><i class="bi bi-clipboard-check"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Avg Marks</h5>
+                    <h2 class="fw-bold mb-0">{{ avg_marks|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-purple"><i class="bi bi-calendar-check"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Avg Attendance</h5>
+                    <h2 class="fw-bold mb-0">{{ avg_attendance|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+    {% elif request.user.role == 'TEACHER' %}
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-blue"><i class="bi bi-journal-text"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Courses Taught</h5>
+                    <h2 class="fw-bold mb-0">{{ courses_taught }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-green"><i class="bi bi-people"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Unique Students</h5>
+                    <h2 class="fw-bold mb-0">{{ total_students }}</h2>
+                </div>
+            </div>
+        </div>
+    {% elif request.user.role == 'STUDENT' %}
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-blue"><i class="bi bi-journal-text"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Enrolled Courses</h5>
+                    <h2 class="fw-bold mb-0">{{ enrolled_courses }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-orange"><i class="bi bi-clipboard-check"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Average Marks</h5>
+                    <h2 class="fw-bold mb-0">{{ avg_marks|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="stat-icon stat-bg-purple"><i class="bi bi-calendar-check"></i></div>
+                <div>
+                    <h5 class="card-title text-muted mb-0">Average Attendance</h5>
+                    <h2 class="fw-bold mb-0">{{ avg_attendance|floatformat:1 }}%</h2>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Recent Data Tables -->
+<div class="row g-4">
+    <div class="col-md-12">
+        <div class="card p-4">
+            <h5 class="fw-bold mb-4">Recent Academic Records</h5>
+            {% if recent_records %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Marks</th>
+                            <th>Grade</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in recent_records %}
+                        <tr>
+                            <td>{{ record.enrollment.student.user.get_full_name|default:record.enrollment.student.user.username }}</td>
+                            <td>{{ record.enrollment.course.code }}</td>
+                            <td>{{ record.marks }}</td>
+                            <td><span class="badge badge-grade-{{ record.grade|lower|slice:':1' }} px-2 py-1">{{ record.grade }}</span></td>
+                            <td class="text-muted">{{ record.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-muted text-center py-4">No recent records found.</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

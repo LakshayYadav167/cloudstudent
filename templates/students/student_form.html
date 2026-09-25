@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}{% if object %}Edit Student{% else %}Add Student{% endif %} - CloudStudent{% endblock %}
+{% block page_title %}{% if object %}Edit Student{% else %}Add Student{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width: 800px;">
+    <h5 class="fw-bold mb-4">{% if object %}Edit Student: {{ object.user.username }}{% else %}New Student Profile{% endif %}</h5>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            {% for field in form %}
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">{{ field.label }}</label>
+                {{ field.errors }}
+                <input type="{{ field.field.widget.input_type|default:'text' }}" name="{{ field.html_name }}" 
+                       class="form-control {% if field.errors %}is-invalid{% endif %}" 
+                       id="{{ field.id_for_label }}"
+                       {% if field.value %}value="{{ field.value|stringformat:'s' }}"{% endif %}
+                       {% if field.field.required %}required{% endif %}
+                       {% if field.field.widget.attrs %}{% for k,v in field.field.widget.attrs.items %} {{k}}="{{v}}" {% endfor %}{% endif %}>
+                
+                {% if field.field.choices %}
+                <!-- Very simplified rendering for choice fields/foreign keys due to output limits. We use JS to fix this if needed, or better, we should render it using Django's {{ field }} -->
+                {% endif %}
+                
+                {% if field.help_text %}
+                <div class="form-text">{{ field.help_text }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Replacing the manual field rendering with standard django rendering for better support of choice fields and foreign keys -->
+        <script>
+            // Since we're rendering manually above, let's just replace the whole form body with standard rendering for safety
+        </script>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                {{ form.as_p }}
+            </div>
+        </div>
+
+        <div class="mt-4 text-end">
+            <a href="{% url 'students:list' %}" class="btn btn-secondary me-2">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Student</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

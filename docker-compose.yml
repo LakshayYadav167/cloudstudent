@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: cloudstudent_db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-cloudstudent}
+      POSTGRES_USER: ${POSTGRES_USER:-devuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpassword}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-devuser} -d ${POSTGRES_DB:-cloudstudent}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    # Ports exposed for local dev, usually not needed in production if web links directly.
+    # ports:
+    #   - "5432:5432"
+
+  web:
+    build: .
+    container_name: cloudstudent_web
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             gunicorn cloudstudent.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 3"
+    volumes:
+      - .:/app
+    ports:
+      - "${PORT:-8000}:8000"
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgres://${POSTGRES_USER:-devuser}:${POSTGRES_PASSWORD:-devpassword}@db:5432/${POSTGRES_DB:-cloudstudent}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

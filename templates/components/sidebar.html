@@ -1,0 +1,36 @@
+<nav id="sidebar">
+    <div class="sidebar-header">
+        <i class="bi bi-cloud-check-fill text-primary"></i>
+        <span>CloudStudent</span>
+    </div>
+
+    <ul class="list-unstyled components">
+        <li class="{% if request.resolver_match.app_name == 'dashboard' %}active{% endif %}">
+            <a href="{% url 'dashboard:index' %}"><i class="bi bi-grid-1x2"></i> Dashboard</a>
+        </li>
+        
+        {% if request.user.role == 'ADMIN' or request.user.role == 'TEACHER' %}
+        <li class="{% if request.resolver_match.app_name == 'students' %}active{% endif %}">
+            <a href="{% url 'students:list' %}"><i class="bi bi-people"></i> Students</a>
+        </li>
+        {% endif %}
+
+        <li class="{% if request.resolver_match.app_name == 'courses' and request.resolver_match.url_name != 'enrollment_list' %}active{% endif %}">
+            <a href="{% url 'courses:list' %}"><i class="bi bi-journal-bookmark"></i> Courses</a>
+        </li>
+
+        <li class="{% if request.resolver_match.url_name == 'enrollment_list' %}active{% endif %}">
+            <a href="{% url 'courses:enrollment_list' %}"><i class="bi bi-card-checklist"></i> Enrollments</a>
+        </li>
+
+        <li class="{% if request.resolver_match.app_name == 'academics' %}active{% endif %}">
+            <a href="{% url 'academics:list' %}"><i class="bi bi-award"></i> Academic Records</a>
+        </li>
+        
+        {% if request.user.is_staff %}
+        <li class="mt-4">
+            <a href="/admin/" target="_blank"><i class="bi bi-gear"></i> Admin Panel</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav

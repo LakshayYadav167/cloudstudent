@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}{% if object %}Edit Enrollment{% else %}Add Enrollment{% endif %} - CloudStudent{% endblock %}
+{% block page_title %}{% if object %}Edit Enrollment{% else %}Add Enrollment{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width: 600px;">
+    <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12">
+                {{ form.as_p }}
+            </div>
+        </div>
+        <div class="mt-4 text-end">
+            <a href="{% url 'courses:enrollment_list' %}" class="btn btn-secondary me-2">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Enrollment</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

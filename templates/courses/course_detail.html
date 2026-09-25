@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}{{ course.code }} - CloudStudent{% endblock %}
+{% block page_title %}Course Details{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-5">
+        <div class="card p-4">
+            <div class="d-flex align-items-center mb-3">
+                <span class="badge bg-primary fs-5 me-3">{{ course.code }}</span>
+                <h4 class="fw-bold mb-0">{{ course.name }}</h4>
+            </div>
+            <p class="text-muted">{{ course.description }}</p>
+            <hr>
+            <div class="row">
+                <div class="col-sm-6 mb-2"><strong>Credits:</strong> {{ course.credits }}</div>
+                <div class="col-sm-6 mb-2"><strong>Semester:</strong> {{ course.semester }}</div>
+                <div class="col-sm-6 mb-2"><strong>Department:</strong> {{ course.department }}</div>
+                <div class="col-sm-6 mb-2"><strong>Instructor:</strong> {{ course.instructor.get_full_name|default:course.instructor.username|default:"TBA" }}</div>
+                <div class="col-sm-6 mb-2"><strong>Enrollments:</strong> {{ enrollment_count }}</div>
+            </div>
+            {% if request.user.role == 'ADMIN' %}
+            <div class="mt-4">
+                <a href="{% url 'courses:edit' course.id %}" class="btn btn-warning"><i class="bi bi-pencil"></i> Edit</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-md-7">
+        <div class="card p-4">
+            <h5 class="fw-bold mb-4">Enrolled Students</h5>
+            {% if enrolled_students %}
+            <div class="table-responsive">
+                <table class="table table-sm align-middle">
+                    <thead>
+                        <tr>
+                            <th>Student ID</th>
+                            <th>Name</th>
+                            <th>Term</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enr in enrolled_students %}
+                        <tr>
+                            <td>{{ enr.student.enrollment_number }}</td>
+                            <td>{{ enr.student.user.get_full_name|default:enr.student.user.username }}</td>
+                            <td>{{ enr.academic_year }} S{{ enr.semester }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted">No students are currently enrolled in this course{% if request.user.role == 'STUDENT' %} or you do not have permission to view them{% endif %}.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

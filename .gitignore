@@ -1,0 +1,32 @@
+# Environments
+.env
+venv/
+.venv/
+env/
+ENV/
+
+# Python
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+.tox/
+
+# Database
+db.sqlite3
+postgres_data/
+
+# OS/IDE
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Build/Docker
+staticfiles/
+*.log

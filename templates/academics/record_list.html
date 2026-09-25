@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Academic Records - CloudStudent{% endblock %}
+{% block page_title %}Academic Records{% endblock %}
+
+{% block content %}
+<div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5 class="fw-bold mb-0">Student Results</h5>
+        {% if request.user.role in 'ADMIN,TEACHER' %}
+        <a href="{% url 'academics:add' %}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Record</a>
+        {% endif %}
+    </div>
+
+    <form method="get" class="row g-3 mb-4">
+        {% if request.user.role != 'STUDENT' %}
+        <div class="col-md-3">
+            <input type="text" name="q" class="form-control" placeholder="Search student..." value="{{ request.GET.q }}">
+        </div>
+        {% endif %}
+        <div class="col-md-3">
+            <input type="text" name="course" class="form-control" placeholder="Course code..." value="{{ request.GET.course }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-secondary w-100"><i class="bi bi-search"></i></button>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>ID</th>
+                    <th>Course</th>
+                    <th>Term</th>
+                    <th>Marks</th>
+                    <th>Grade</th>
+                    <th>Attendance</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in records %}
+                <tr>
+                    <td class="fw-bold">{{ record.enrollment.student.user.get_full_name|default:record.enrollment.student.user.username }}</td>
+                    <td>{{ record.enrollment.student.enrollment_number }}</td>
+                    <td>{{ record.enrollment.course.code }}</td>
+                    <td>{{ record.enrollment.academic_year }} S{{ record.enrollment.semester }}</td>
+                    <td>{{ record.marks }}%</td>
+                    <td><span class="badge badge-grade-{{ record.grade|lower|slice:':1' }} px-2 py-1">{{ record.grade }}</span></td>
+                    <td>{{ record.attendance }}%</td>
+                    <td>
+                        <a href="{% url 'academics:detail' record.id %}" class="btn btn-sm btn-info text-white"><i class="bi bi-eye"></i></a>
+                        {% if request.user.role in 'ADMIN,TEACHER' %}
+                        <a href="{% url 'academics:edit' record.id %}" class="btn btn-sm btn-warning text-dark"><i class="bi bi-pencil"></i></a>
+                        {% endif %}
+                        {% if request.user.role == 'ADMIN' %}
+                        <a href="{% url 'academics:delete' record.id %}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">No academic records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'components/pagination.html' %}
+</div>
+{% endblock %}

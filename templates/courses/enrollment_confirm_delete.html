@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Confirm Deletion - CloudStudent{% endblock %}
+{% block page_title %}Delete Enrollment{% endblock %}
+
+{% block content %}
+<div class="card p-4 mx-auto text-center" style="max-width: 500px;">
+    <i class="bi bi-exclamation-triangle text-danger mb-3" style="font-size: 3rem;"></i>
+    <h4 class="fw-bold mb-3">Confirm Deletion</h4>
+    <p class="mb-4">Are you sure you want to remove the enrollment for <strong>{{ object.student.user.username }}</strong> from <strong>{{ object.course.code }}</strong>?</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'courses:enrollment_list' %}" class="btn btn-secondary px-4">Cancel</a>
+            <button type="submit" class="btn btn-danger px-4">Delete</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

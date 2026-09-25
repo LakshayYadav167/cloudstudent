@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}{{ student.user.get_full_name }} - CloudStudent{% endblock %}
+{% block page_title %}Student Details{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card p-4 text-center">
+            <img src="https://ui-avatars.com/api/?name={{ student.user.username }}&size=120&background=2563eb&color=fff" alt="Avatar" class="rounded-circle mx-auto mb-3" style="width: 120px; height: 120px;">
+            <h4 class="fw-bold">{{ student.user.get_full_name|default:student.user.username }}</h4>
+            <p class="text-muted mb-1">{{ student.enrollment_number }}</p>
+            <p><span class="badge {% if student.status == 'ACTIVE' %}bg-success{% else %}bg-secondary{% endif %}">{{ student.status }}</span></p>
+            
+            {% if request.user.role == 'ADMIN' %}
+            <div class="mt-3">
+                <a href="{% url 'students:edit' student.id %}" class="btn btn-warning btn-sm px-3"><i class="bi bi-pencil"></i> Edit</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card p-4 mb-4">
+            <h5 class="fw-bold mb-3">Academic Information</h5>
+            <div class="row">
+                <div class="col-sm-6 mb-2"><strong>Department:</strong> {{ student.department }}</div>
+                <div class="col-sm-6 mb-2"><strong>Program:</strong> {{ student.program }}</div>
+                <div class="col-sm-6 mb-2"><strong>Semester:</strong> {{ student.semester }}</div>
+                <div class="col-sm-6 mb-2"><strong>Enrollment Date:</strong> {{ student.enrollment_date }}</div>
+            </div>
+            
+            <hr>
+            
+            <h5 class="fw-bold mb-3">Personal Information</h5>
+            <div class="row">
+                <div class="col-sm-6 mb-2"><strong>Email:</strong> {{ student.user.email }}</div>
+                <div class="col-sm-6 mb-2"><strong>Phone:</strong> {{ student.user.phone|default:"N/A" }}</div>
+                <div class="col-sm-6 mb-2"><strong>Date of Birth:</strong> {{ student.date_of_birth|default:"N/A" }}</div>
+                <div class="col-sm-6 mb-2"><strong>Gender:</strong> {{ student.get_gender_display|default:"N/A" }}</div>
+                <div class="col-sm-12"><strong>Address:</strong> {{ student.address|default:"N/A" }}</div>
+            </div>
+        </div>
+
+        <div class="card p-4">
+            <h5 class="fw-bold mb-3">Current Enrollments</h5>
+            {% if enrollments %}
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Code</th>
+                            <th>Term</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for enr in enrollments %}
+                        <tr>
+                            <td>{{ enr.course.name }}</td>
+                            <td>{{ enr.course.code }}</td>
+                            <td>{{ enr.academic_year }} S{{ enr.semester }}</td>
+                            <td>{{ enr.status }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="text-muted small">No active enrollments.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

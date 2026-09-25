@@ -1,0 +1,36 @@
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+    <div class="container-fluid">
+        <button type="button" id="sidebarCollapse" class="btn btn-light d-md-none me-3">
+            <i class="bi bi-list"></i>
+        </button>
+        <div class="d-none d-md-block fs-5 fw-bold text-dark">
+            {% block page_title %}Dashboard{% endblock %}
+        </div>
+        
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <div class="text-end d-none d-sm-block">
+                <div class="fw-bold text-dark">{{ request.user.get_full_name|default:request.user.username }}</div>
+                <div class="text-muted small">{{ request.user.get_role_display }}</div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=2563eb&color=fff" alt="mdo" width="40" height="40" class="rounded-circle">
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="dropdownUser">
+                    {% if request.user.role == 'STUDENT' %}
+                    {% if request.user.student_profile %}
+                    <li><a class="dropdown-item" href="{% url 'students:detail' request.user.student_profile.id %}">My Profile</a></li>
+                    {% endif %}
+                    <li><hr class="dropdown-divider"></li>
+                    {% endif %}
+                    <li>
+                        <form method="post" action="{% url 'accounts:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit" class="dropdown-item text-danger">Sign out</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav

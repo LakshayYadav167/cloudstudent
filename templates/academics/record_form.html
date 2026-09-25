@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}{% if object %}Edit Record{% else %}Add Record{% endif %} - CloudStudent{% endblock %}
+{% block page_title %}{% if object %}Edit Record{% else %}Add Record{% endif %}{% endblock %}
+
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width: 600px;">
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i> The final grade is automatically calculated by the system based on the submitted marks.
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+            <div class="col-12">
+                {{ form.as_p }}
+            </div>
+        </div>
+        <div class="mt-4 text-end">
+            <a href="{% url 'academics:list' %}" class="btn btn-secondary me-2">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save Record</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

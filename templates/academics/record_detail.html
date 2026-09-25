@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Record Details - CloudStudent{% endblock %}
+{% block page_title %}Academic Record Details{% endblock %}
+
+{% block content %}
+<div class="card p-4 mx-auto" style="max-width: 600px;">
+    <h4 class="fw-bold mb-4 text-center">Result Card</h4>
+    
+    <div class="row mb-3">
+        <div class="col-sm-5 fw-bold text-muted">Student Name:</div>
+        <div class="col-sm-7 fw-bold">{{ record.enrollment.student.user.get_full_name|default:record.enrollment.student.user.username }}</div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-5 fw-bold text-muted">Enrollment Number:</div>
+        <div class="col-sm-7">{{ record.enrollment.student.enrollment_number }}</div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-5 fw-bold text-muted">Course:</div>
+        <div class="col-sm-7">{{ record.enrollment.course.code }} - {{ record.enrollment.course.name }}</div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-5 fw-bold text-muted">Academic Term:</div>
+        <div class="col-sm-7">{{ record.enrollment.academic_year }} Semester {{ record.enrollment.semester }}</div>
+    </div>
+    
+    <hr>
+    
+    <div class="row mb-3 align-items-center">
+        <div class="col-sm-5 fw-bold text-muted">Marks Achieved:</div>
+        <div class="col-sm-7 fs-5">{{ record.marks }}%</div>
+    </div>
+    <div class="row mb-3 align-items-center">
+        <div class="col-sm-5 fw-bold text-muted">Final Grade:</div>
+        <div class="col-sm-7">
+            <span class="badge badge-grade-{{ record.grade|lower|slice:':1' }} fs-5 px-3 py-2">{{ record.grade }}</span>
+        </div>
+    </div>
+    <div class="row mb-3 align-items-center">
+        <div class="col-sm-5 fw-bold text-muted">Attendance:</div>
+        <div class="col-sm-7 fs-5">{{ record.attendance }}%</div>
+    </div>
+    
+    <div class="mt-4 pt-3 border-top text-center">
+        <a href="{% url 'academics:list' %}" class="btn btn-secondary px-4">Back to List</a>
+    </div>
+</div>
+{% endblock %}
