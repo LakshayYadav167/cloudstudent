@@ -8,3 +8,4 @@ azure-storage-blob==12.19.1
 dj-database-url==2.1.0
 django-filter>=24.2
 python-dotenv>=1.0.0
+whitenoise==6.6.0
