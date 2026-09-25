@@ -11,7 +11,7 @@ pytestmark = pytest.mark.django_db
 
 def test_login_logout(client, custom_admin_user):
     # Login
-    resp = client.post(reverse('accounts:login'), {'username': 'admin_test_cf', 'password': 'password123'})
+    resp = client.post(reverse('accounts:login'), {'username': 'admin_test_cf', 'password': 'test-only-password'})
     assert resp.status_code == 302
     
     # Logout

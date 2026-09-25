@@ -14,22 +14,22 @@ class Command(BaseCommand):
 
         # 1 Admin
         admin, _ = User.objects.get_or_create(username='admin', defaults={'role': 'ADMIN', 'email': 'admin@example.com', 'is_staff': True, 'is_superuser': True})
-        admin.set_password('Admin@123')
+        admin.set_password('demo-admin-password')
         admin.save()
 
         # 2 Teachers
         t1, _ = User.objects.get_or_create(username='teacher1', defaults={'role': 'TEACHER', 'first_name': 'Alice', 'last_name': 'Smith'})
-        t1.set_password('Teacher@123')
+        t1.set_password('demo-teacher-password')
         t1.save()
         t2, _ = User.objects.get_or_create(username='teacher2', defaults={'role': 'TEACHER', 'first_name': 'Bob', 'last_name': 'Jones'})
-        t2.set_password('Teacher@123')
+        t2.set_password('demo-teacher-password')
         t2.save()
 
         # 15 Students
         students = []
         for i in range(1, 16):
             u, _ = User.objects.get_or_create(username=f'student{i}', defaults={'role': 'STUDENT', 'first_name': f'Student{i}', 'last_name': 'Test'})
-            u.set_password('Student@123')
+            u.set_password('demo-student-password')
             u.save()
             
             sp, _ = StudentProfile.objects.get_or_create(
@@ -80,8 +80,9 @@ class Command(BaseCommand):
                         defaults={'marks': marks, 'attendance': attendance}
                     )
 
+        self.stdout.write(self.style.WARNING("WARNING: THESE ARE DEMO ACCOUNTS. DO NOT USE IN PRODUCTION."))
         self.stdout.write(self.style.SUCCESS("Database seeded successfully!"))
         self.stdout.write("Credentials:")
-        self.stdout.write("Admin: admin / Admin@123")
-        self.stdout.write("Teacher: teacher1 / Teacher@123")
-        self.stdout.write("Student: student1 / Student@123")
+        self.stdout.write("Admin: admin / demo-admin-password")
+        self.stdout.write("Teacher: teacher1 / demo-teacher-password")
+        self.stdout.write("Student: student1 / demo-student-password")

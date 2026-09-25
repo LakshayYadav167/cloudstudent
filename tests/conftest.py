@@ -4,16 +4,16 @@ from students.models import StudentProfile
 
 @pytest.fixture
 def custom_admin_user():
-    user = User.objects.create_user(username='admin_test_cf', password='password123', role='ADMIN')
+    user = User.objects.create_user(username='admin_test_cf', password='test-only-password', role='ADMIN')
     return user
 
 @pytest.fixture
 def teacher_user():
-    return User.objects.create_user(username='teacher_test_cf', password='password123', role='TEACHER')
+    return User.objects.create_user(username='teacher_test_cf', password='test-only-password', role='TEACHER')
 
 @pytest.fixture
 def student_user():
-    return User.objects.create_user(username='student_test_cf', password='password123', role='STUDENT')
+    return User.objects.create_user(username='student_test_cf', password='test-only-password', role='STUDENT')
 
 @pytest.fixture
 def student_profile(student_user):

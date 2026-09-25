@@ -114,7 +114,7 @@ def test_dashboard_api(api_client, custom_admin_user):
 def test_token_authentication(api_client, custom_admin_user):
     url = reverse('api-token-auth')
     # Generate token
-    resp = api_client.post(url, {'username': 'admin_test_cf', 'password': 'password123'})
+    resp = api_client.post(url, {'username': 'admin_test_cf', 'password': 'test-only-password'})
     assert resp.status_code == 200
     assert 'token' in resp.data
     token = resp.data['token']
