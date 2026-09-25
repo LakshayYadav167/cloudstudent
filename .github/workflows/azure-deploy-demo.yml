@@ -1,0 +1,49 @@
+name: Azure Deploy Demo
+
+# THIS IS A DEMONSTRATION TEMPLATE ONLY.
+# IT IS INTENTIONALLY DISABLED.
+# DO NOT ENABLE THIS WORKFLOW UNLESS AZURE RESOURCES ARE PROVISIONED.
+
+on:
+  # push:
+  #   branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # These variables would be replaced with actual secrets in a real deployment
+    env:
+      AZURE_WEBAPP_NAME: "app-cloudstudent-prod"
+      AZURE_REGISTRY_LOGIN_SERVER: "acrcloudstudent.azurecr.io"
+      AZURE_REGISTRY_USERNAME: ${{ secrets.AZURE_REGISTRY_USERNAME }}
+      AZURE_REGISTRY_PASSWORD: ${{ secrets.AZURE_REGISTRY_PASSWORD }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    # - name: Log in to Azure Container Registry
+    #   uses: docker/login-action@v3
+    #   with:
+    #     registry: ${{ env.AZURE_REGISTRY_LOGIN_SERVER }}
+    #     username: ${{ env.AZURE_REGISTRY_USERNAME }}
+    #     password: ${{ env.AZURE_REGISTRY_PASSWORD }}
+
+    # - name: Build and push container image
+    #   uses: docker/build-push-action@v5
+    #   with:
+    #     context: .
+    #     push: true
+    #     tags: ${{ env.AZURE_REGISTRY_LOGIN_SERVER }}/cloudstudent:${{ github.sha }},${{ env.AZURE_REGISTRY_LOGIN_SERVER }}/cloudstudent:latest
+
+    # - name: Deploy to Azure Web App
+    #   uses: azure/webapps-deploy@v3
+    #   with:
+    #     app-name: ${{ env.AZURE_WEBAPP_NAME }}
+    #     publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+    #     images: ${{ env.AZURE_REGISTRY_LOGIN_SERVER }}/cloudstudent:latest
