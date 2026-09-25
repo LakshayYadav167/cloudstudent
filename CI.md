@@ -22,7 +22,7 @@ The workflow ensures that all code merged into the production branches is struct
 
 ## 4. Expected Successful Result
 A successful run will complete all steps without errors. The expected test baseline is:
-- **26 tests passed**
+- **44+ tests passed**
 - **0 failed**
 - **0 errors**
 

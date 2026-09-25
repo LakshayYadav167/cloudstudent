@@ -86,11 +86,7 @@ Data persists across `docker compose restart`, `docker compose stop`, and `docke
 *(Do not use `docker compose down -v` unless you explicitly intend to delete your data).*
 
 ## 13. Static Files
-In this configuration, static files are collected at build/startup using:
-```bash
-python manage.py collectstatic --noinput
-```
-*Note: In a true production environment, Gunicorn should be placed behind a reverse proxy (like Nginx) which will serve the `/staticfiles/` directory natively.*
+In this configuration, static files are collected dynamically via the startup command (`collectstatic`). They are served seamlessly and efficiently through Gunicorn utilizing the **WhiteNoise** middleware, which provides automatic compression and caching headers.
 
 ## 14. Troubleshooting
 - **Database Connection Error:** Ensure the `db` service is healthy (`docker compose ps`). Check that your `DATABASE_URL` matches your `POSTGRES_*` environment variables.

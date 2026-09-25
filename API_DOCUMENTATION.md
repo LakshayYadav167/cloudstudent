@@ -81,7 +81,7 @@ Authorization: Token <your_token>
 ### Create Enrollment
 - **URL:** `/api/enrollments/`
 - **Method:** `POST`
-- **Permissions:** Admin (All), Teacher (Own Courses)
+- **Permissions:** Admin Only.
 - **Request Body:**
   ```json
   {
@@ -97,7 +97,7 @@ Authorization: Token <your_token>
 ### Retrieve / Update / Delete
 - **URL:** `/api/enrollments/<id>/`
 - **Method:** `GET`, `PUT`, `PATCH`, `DELETE`
-- **Permissions:** Role-based.
+- **Permissions:** Admin can Update/Delete. Teachers/Students are Read-Only (for their assigned/enrolled courses).
 
 ---
 
